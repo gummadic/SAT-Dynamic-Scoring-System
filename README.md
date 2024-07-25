@@ -1,5 +1,6 @@
 Project Documentation for Form Submission and Redirect App
-Overview
+
+Overview:
 This Google Apps Script application manages form submissions and redirects users based on scores stored in a Google Spreadsheet. Apart from functionality, there are crucial setup and configuration steps outlined below.
 
 Setup and Configuration
