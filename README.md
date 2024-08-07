@@ -62,7 +62,8 @@ Screenshots:
 <img width="1344" alt="Updated values as below for deployment" src="https://github.com/user-attachments/assets/1269cac4-150a-4166-8706-54cbc5792c1d">
 <img width="1061" alt="Copy the script id" src="https://github.com/user-attachments/assets/46c41da7-7e3c-4392-90ab-229d28a6606e">
 <img width="1295" alt="Go to presentation and confirmation message and update as shown below" src="https://github.com/user-attachments/assets/c7311d93-ed61-464f-97de-f0982039bc81">
-<img width="1412" alt="Update with Click here for next steps and script url" src="https://github.com/user-attachments/assets/fd1537e9-76ef-4df5-b33c-4affebfd841a">
+<img width="1412" alt="Update with Click here for next steps and script url" src="https://github.com/user-attachments/assets/fd1537e9-76ef-4df5-b33c-4affebfd841a"><img width="752" alt="Screenshot 2024-08-06 at 9 33 12 PM" src="https://github.com/user-attachments/assets/ba265224-d3b6-4871-826a-1f39bab1b956">
+
 <img width="829" alt="Ability to update the type of answer" src="https://github.com/user-attachments/assets/161a2855-5311-4445-9671-f6f08da12459">
 <img width="737" alt="Instant pop up to correct student answer" src="https://github.com/user-attachments/assets/1f16d493-1f07-41e1-99f2-5efec3835f0a">
 
