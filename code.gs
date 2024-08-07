@@ -1,5 +1,5 @@
 // Define the spreadsheet ID
-var spreadsheetId = '1L6ZO0DEPdWSRixcvCVWwAIH1RUEyVmy5MdANuS3b-RA';
+var spreadsheetId = '1As184zPVPQrY9muk7TtImaoNYZGJCmnao-3OU7XlMgo'; 
 var scoreColumn = 1; // Column index where the score is stored (1 for column B)
 
 // Function to handle form submission and store score
