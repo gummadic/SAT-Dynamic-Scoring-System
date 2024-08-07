@@ -72,8 +72,14 @@ function doGet(e) {
      Logger.log('Stored Score: ' + urlMap[storedScore]);
     // Redirect to the corresponding URL based on storedScore
     var url = urlMap[storedScore];
-    if (url) {
-      return HtmlService.createHtmlOutput('<script>window.location.href="' + url + '";</script>');
+   if (url) {
+      // Return HTML to open URL in a new tab
+      return HtmlService.createHtmlOutput(
+        '<html><script>' +
+        'window.open("' + url + '", "_blank");' +
+        'window.close();' +
+        '</script></html>'
+      );
     } else {
       return HtmlService.createHtmlOutput('Invalid category or URL not found.');
     }
