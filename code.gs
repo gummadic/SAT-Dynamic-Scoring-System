@@ -1,6 +1,6 @@
 // Define the spreadsheet ID
-var spreadsheetId = '1As184zPVPQrY9muk7TtImaoNYZGJCmnao-3OU7XlMgo'; 
-var scoreColumn = 1; // Column index where the score is stored (1 for column B)
+var spreadsheetId = '1Eq2AJwx95uCkeZhd4tVqzd7tBJarQKhN_qK1B6KTDLI';  // old '1Z-VdO3Uwwno5vhBGc18pP9JFBeDh12VYc-k6J-gdjaw'; 
+var scoreColumn = 2; // old 1; // Column index where the score is stored (1 for column B)
 
 // Function to handle form submission and store score
 function onFormSubmit(e) {
@@ -13,17 +13,22 @@ function onFormSubmit(e) {
     }
 
     // Assuming the score is in the specified column of the form responses
-    var score = responses[scoreColumn]; // Use scoreColumn to fetch the score
+    var score = responses[scoreColumn];
+
+    // Check if score is empty, null, or undefined; if so, set it to 0
+    if (!score) {
+      score = 0;
+    }
 
     // Evaluate score if it's a mathematical expression
     var scoreAsNumber = evaluateExpression(score);
     var formattedScore = scoreAsNumber.toFixed(1); // Adjust decimal places as needed
 
-    // Store the formatted score in the spreadsheet
-    var newRow = [formattedScore];
-    sheet.appendRow(newRow);
+    // Commenting out the line that appends a row to prevent data writing
+    // var newRow = [formattedScore];
+    // sheet.appendRow(newRow);
 
-    Logger.log('Score stored: ' + formattedScore);
+    Logger.log('Score evaluated: ' + formattedScore);
 
   } catch (error) {
     Logger.log('Error: ' + error.toString());
@@ -69,7 +74,7 @@ function doGet(e) {
 
     Logger.log('Percentage Score: ' + percentage.toFixed(2) + '%');
     Logger.log('Stored Score: ' + data.length);
-     Logger.log('Stored Score: ' + urlMap[storedScore]);
+    Logger.log('Stored Score: ' + urlMap[storedScore]);
     // Redirect to the corresponding URL based on storedScore
     var url = urlMap[storedScore];
    if (url) {
@@ -89,7 +94,6 @@ function doGet(e) {
     return HtmlService.createHtmlOutput('Error redirecting.');
   }
 }
-
 
 // Helper function to evaluate mathematical expressions in form responses
 function evaluateExpression(expression) {
