@@ -1,6 +1,6 @@
 // Define the spreadsheet ID
-var spreadsheetId = '1Eq2AJwx95uCkeZhd4tVqzd7tBJarQKhN_qK1B6KTDLI';  // old '1Z-VdO3Uwwno5vhBGc18pP9JFBeDh12VYc-k6J-gdjaw'; 
-var scoreColumn = 2; // old 1; // Column index where the score is stored (1 for column B)
+var spreadsheetId = '1_4qF206N64ZJDlhrAkq3yMATskZpiyvniowO7pQzPa4'; // Old '1Z-VdO3Uwwno5vhBGc18pP9JFBeDh12VYc-k6J-gdjaw'
+var scoreColumn = 2; // Column index where the score is stored (1 for column B)
 
 // Function to handle form submission and store score
 function onFormSubmit(e) {
@@ -14,7 +14,7 @@ function onFormSubmit(e) {
 
     // Assuming the score is in the specified column of the form responses
     var score = responses[scoreColumn];
-
+    
     // Check if score is empty, null, or undefined; if so, set it to 0
     if (!score) {
       score = 0;
@@ -24,11 +24,11 @@ function onFormSubmit(e) {
     var scoreAsNumber = evaluateExpression(score);
     var formattedScore = scoreAsNumber.toFixed(1); // Adjust decimal places as needed
 
-    // Commenting out the line that appends a row to prevent data writing
-    // var newRow = [formattedScore];
-    // sheet.appendRow(newRow);
+    // Store the formatted score in the spreadsheet
+    var newRow = [formattedScore];
+    sheet.appendRow(newRow);
 
-    Logger.log('Score evaluated: ' + formattedScore);
+    Logger.log('Score stored: ' + formattedScore);
 
   } catch (error) {
     Logger.log('Error: ' + error.toString());
@@ -48,20 +48,32 @@ function doGet(e) {
     var totalQuestions = totalColumns - 1; // Exclude the score column
 
     // Calculate percentage of correct answers
-    var totalAnswers = sheet.getRange(lastRow, scoreColumn + 1).getValue(); // Adjusted to fetch score from dynamic column
+    var totalAnswers = sheet.getRange(lastRow, scoreColumn + 1).getValue();
+    
+    // Check if totalAnswers is empty, null, or undefined; if so, set it to 0
+    if (!totalAnswers) {
+      totalAnswers = 0;
+    }
+
     var percentage = (totalAnswers / totalQuestions) * 100;
 
     // Fetching data from Sheet1: categories, thresholds, and urlMap
-    var data = records.getRange('A2:C' + lastRow).getValues(); // Assuming data range from A2:C to lastRow
+    var data = records.getRange('A2:C' + records.getLastRow()).getValues();
     var numColumns = data[0].length - 1; 
+
     // Build urlMap object and determine storedScore based on percentage and thresholds
     var urlMap = {};
     var storedScore = '';
 
-    for (var i = 0; i < numColumns; i++) {
+    for (var i = 0; i < data.length; i++) {
       var level = data[i][0];
       var threshold = data[i][1];
       var url = data[i][2];
+
+      // Check if threshold is empty, null, or undefined; if so, set it to 0
+      if (!threshold) {
+        threshold = 0;
+      }
 
       // Build urlMap with level as key and URL as value
       urlMap[level] = url;
@@ -73,11 +85,12 @@ function doGet(e) {
     }
 
     Logger.log('Percentage Score: ' + percentage.toFixed(2) + '%');
-    Logger.log('Stored Score: ' + data.length);
-    Logger.log('Stored Score: ' + urlMap[storedScore]);
+    Logger.log('Stored Score: ' + storedScore);
+    Logger.log('Redirect URL: ' + urlMap[storedScore]);
+
     // Redirect to the corresponding URL based on storedScore
     var url = urlMap[storedScore];
-   if (url) {
+    if (url) {
       // Return HTML to open URL in a new tab
       return HtmlService.createHtmlOutput(
         '<html><script>' +
@@ -98,5 +111,10 @@ function doGet(e) {
 // Helper function to evaluate mathematical expressions in form responses
 function evaluateExpression(expression) {
   // Implement your logic to evaluate expressions if needed
-  return parseFloat(expression); // Example implementation, parse float if expression is a number
+  var result = parseFloat(expression);
+  // Check if the result is NaN (Not a Number), if so, set it to 0
+  if (isNaN(result)) {
+    result = 0;
+  }
+  return result;
 }
