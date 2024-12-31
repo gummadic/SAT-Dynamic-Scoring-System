@@ -42,20 +42,43 @@ function doGet(e) {
     var records = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Sheet1');
     var sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Form responses 1');
 
-    // Get the last stored score from the sheet
-    var lastRow = sheet.getLastRow();
-    var totalColumns = sheet.getLastColumn();
-    var totalQuestions = totalColumns - 1; // Exclude the score column
-
-    // Calculate percentage of correct answers
-    var totalAnswers = sheet.getRange(lastRow, scoreColumn + 1).getValue();
-    
-    // Check if totalAnswers is empty, null, or undefined; if so, set it to 0
-    if (!totalAnswers) {
-      totalAnswers = 0;
+    // Get the user's email
+    var userEmail = Session.getActiveUser().getEmail();
+    if (!userEmail) {
+      return HtmlService.createHtmlOutput('Error: User email not found or user is not logged in.');
     }
 
-    var percentage = (totalAnswers / totalQuestions) * 100;
+    // Get the column index for the 'Email Address' column (B) and 'Score' column (C)
+    var emailColumnIndex = 2; // Column B
+    var scoreColumnIndex = 3; // Column C
+
+    // Find the last row with the user's email in column B
+    var emailColumn = sheet.getRange(1, emailColumnIndex, sheet.getLastRow(), 1).getValues();
+    var lastRow = -1; // Initialize variable for the last row with the user’s email
+
+    // Loop through all rows to find the last row containing the user's email
+    for (var i = emailColumn.length - 1; i >= 0; i--) {
+      if (emailColumn[i][0] == userEmail) {
+        lastRow = i + 1; // Adjust for 1-based indexing in Google Sheets
+        break; // Exit loop after finding the last row
+      }
+    }
+
+    // If no email is found, use the last row in the sheet as a fallback
+    if (lastRow == -1) {
+      lastRow = sheet.getLastRow(); // Use the last row if no email is found
+    }
+
+    // Get the score value from column C in the last row for this email (or fallback last row)
+    var scoreValue = sheet.getRange(lastRow, scoreColumnIndex).getValue();
+    if (!scoreValue) {
+      scoreValue = 0; // If no score, default to 0
+    }
+
+    // Calculate the percentage of correct answers
+    var totalColumns = sheet.getLastColumn();
+    var totalQuestions = totalColumns - 4; // Exclude Timestamp (1), Email Address (2), Score (3), and Name (4) columns
+    var percentage = (scoreValue / totalQuestions) * 100;
 
     // Fetching data from Sheet1: categories, thresholds, and urlMap
     var data = records.getRange('A2:C' + records.getLastRow()).getValues();
